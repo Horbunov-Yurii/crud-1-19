@@ -1,0 +1,96 @@
+.box {
+  width: 1200px;
+  outline: 1px solid red;
+  margin: 0 auto;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  flex-basis: calc((100% - 60px) / 3);
+  outline: 1px solid blue;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 3px grey;
+  padding: 10px;
+}
+
+.image {
+  width: 100%;
+  height: 500px;
+}
+
+.edit {
+  color: white;
+  border-radius: 10px;
+  background-color: blue;
+  padding: 10px 20px;
+  border: none;
+}
+
+.delete {
+  color: white;
+  border-radius: 10px;
+  background-color: red;
+  padding: 10px 20px;
+  border: none;
+}
+
+.modal-btn {
+  color: white;
+  border-radius: 10px;
+  background-color: rgb(0, 255, 0);
+  padding: 10px 20px;
+  border: none;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(118, 117, 117, 0.415);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal {
+  width: 500px;
+  height: 500px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 50px;
+}
+
+.submit {
+  color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: green;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+input {
+    width: 100%;
+    height: 50px;
+}
