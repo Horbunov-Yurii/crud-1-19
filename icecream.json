@@ -1,33 +1,6 @@
 {
   "iceCreams": [
     {
-      "id": "1",
-      "name": "Ванільне",
-      "type": "класичне",
-      "calories": 207,
-      "price": 35,
-      "description": "Ніжне класичне морозиво з натуральною ваніллю.",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/I_scream_You_Scream_%28Unsplash%29.jpg/250px-I_scream_You_Scream_%28Unsplash%29.jpg"
-    },
-    {
-      "id": "2",
-      "name": "Шоколадне",
-      "type": "класичне",
-      "calories": 220,
-      "price": 38,
-      "description": "Насичений шоколадний смак з какао преміум якості.",
-      "image": "https://zamorozka24.com.ua/image/cache/catalog/morozyvo/limo-new/Morozhenoe-eskymo-Bezlaktoznoe-Vanyl-v-kon%20dyterskoj-glaz%20ury-10-v-70g-g%20-Torgovaya-marka-Limo-2-756x800.png"
-    },
-    {
-      "id": "3",
-      "name": "Полуничне",
-      "type": "ягідне",
-      "calories": 195,
-      "price": 36,
-      "description": "Морозиво з додаванням свіжої полуничної пюре.",
-      "image": "https://mountain.limited/wp-content/themes/mountain/assets/img/bg/iceCreamP.png"
-    },
-    {
       "id": "4",
       "name": "Фісташкове",
       "type": "горіхове",
