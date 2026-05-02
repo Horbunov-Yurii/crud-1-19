@@ -716,21 +716,24 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"2R06K":[function(require,module,exports,__globalThis) {
 var _getIce = require("./api/get-ice");
 var _postIce = require("./api/post-ice");
+var _delIce = require("./api/del-ice");
+var _updIce = require("./api/upd-ice");
 const listRef = document.querySelector(".list");
 const modalBtn = document.querySelector(".modal-btn");
 const backdrop = document.querySelector(".backdrop");
 const form = document.querySelector(".form");
+let currentId = null;
 function createItemsMarcups(array) {
     const item = array.map(({ id, name, type, calories, price, description, image })=>{
         return `<li class="item" id="${id}">
         <img src="${image}" alt="${description}" class="image">
-        <h2>${name}</h2>
-        <p>${description}</p>
-        <p>${price}</p>
-        <p>${calories}</p>
-        <p>${type}</p>
-        <button type="button" class="edit">Edit</button>
-        <button type="button" class="delete">Delete</button>
+        <h2 class="title">${name}</h2>
+        <p class="desc">${description}</p>
+        <p class="price">${price}</p>
+        <p class="cal">${calories}</p>
+        <p class="type">${type}</p>
+        <button type="button" class="edit" data-action="edit">Edit</button>
+        <button type="button" class="delete" data-action="delete">Delete</button>
     </li>`;
     }).join("");
     listRef.innerHTML = item;
@@ -756,16 +759,38 @@ form.addEventListener("submit", (event)=>{
         calories: elements.calories.value,
         type: elements.type.value
     };
-    (0, _postIce.postIce)(iceData).then(()=>{
-        (0, _getIce.getIce)().then((res)=>{
-            form.reset();
-            closeModal();
-            createItemsMarcups(res);
-        });
+    if (currentId === null) {
+        (0, _postIce.postIce)(iceData).then(afterSubmit);
+        return;
+    }
+    (0, _updIce.updateIce)(currentId, iceData).then(afterSubmit);
+});
+function afterSubmit() {
+    (0, _getIce.getIce)().then((res)=>{
+        form.reset();
+        closeModal();
+        createItemsMarcups(res);
     });
+}
+listRef.addEventListener("click", (event)=>{
+    const action = event.target.dataset.action;
+    if (!action) return;
+    const li = event.target.closest("li");
+    const id = li.id;
+    if (action === "delete") (0, _delIce.delIce)(id).then(()=>(0, _getIce.getIce)()).then((res)=>createItemsMarcups(res));
+    if (action === "edit") {
+        openModal();
+        currentId = id;
+        form.elements.image.value = li.querySelector("img").src;
+        form.elements.name.value = li.querySelector(".title").textContent;
+        form.elements.description.value = li.querySelector(".desc").textContent;
+        form.elements.price.value = li.querySelector(".price").textContent;
+        form.elements.calories.value = li.querySelector(".cal").textContent;
+        form.elements.type.value = li.querySelector(".type").textContent;
+    }
 });
 
-},{"./api/get-ice":"1FO1C","./api/post-ice":"a0fTv"}],"1FO1C":[function(require,module,exports,__globalThis) {
+},{"./api/get-ice":"1FO1C","./api/post-ice":"a0fTv","./api/del-ice":"cHYIh","./api/upd-ice":"bJHzb"}],"1FO1C":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getIce", ()=>getIce);
@@ -816,6 +841,32 @@ const postIce = (iceData)=>{
         }
     };
     return fetch("http://localhost:3000/iceCreams", options).then((res)=>res.json());
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cHYIh":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "delIce", ()=>delIce);
+const delIce = (id)=>{
+    const options = {
+        method: "DELETE"
+    };
+    return fetch(`http://localhost:3000/iceCreams/${id}`, options).then((res)=>res.json());
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bJHzb":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateIce", ()=>updateIce);
+const updateIce = (id, iceData)=>{
+    const options = {
+        method: "PUT",
+        body: JSON.stringify(iceData),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    };
+    return fetch(`http://localhost:3000/iceCreams/${id}`, options).then((res)=>res.json());
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["7wZbQ","2R06K"], "2R06K", "parcelRequireb2e3", {})
