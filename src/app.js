@@ -1,22 +1,24 @@
 import { getIce } from "./api/get-ice";
 import { postIce } from "./api/post-ice";
 import { delIce } from "./api/del-ice";
+import { updateIce } from "./api/upd-ice";
 
 const listRef = document.querySelector(".list");
 const modalBtn = document.querySelector(".modal-btn");
 const backdrop = document.querySelector(".backdrop");
 const form = document.querySelector(".form");
+let currentId = null
 
 function createItemsMarcups(array) {
   const item = array
     .map(({ id, name, type, calories, price, description, image }) => {
       return `<li class="item" id="${id}">
         <img src="${image}" alt="${description}" class="image">
-        <h2>${name}</h2>
-        <p>${description}</p>
-        <p>${price}</p>
-        <p>${calories}</p>
-        <p>${type}</p>
+        <h2 class="title">${name}</h2>
+        <p class="desc">${description}</p>
+        <p class="price">${price}</p>
+        <p class="cal">${calories}</p>
+        <p class="type">${type}</p>
         <button type="button" class="edit" data-action="edit">Edit</button>
         <button type="button" class="delete" data-action="delete">Delete</button>
     </li>`;
@@ -50,14 +52,19 @@ form.addEventListener("submit", (event) => {
     calories: elements.calories.value,
     type: elements.type.value,
   };
-  postIce(iceData).then(() => {
+  if(currentId === null){
+  postIce(iceData).then(afterSubmit);
+  return
+  }
+  updateIce(currentId, iceData).then(afterSubmit)
+});
+function afterSubmit (){
     getIce().then((res) => {
       form.reset();
       closeModal();
       createItemsMarcups(res);
     });
-  });
-});
+}
 
 listRef.addEventListener("click", (event) => {
   const action = event.target.dataset.action;
@@ -71,6 +78,16 @@ listRef.addEventListener("click", (event) => {
   if(action === "delete"){
     delIce(id).then(()=>getIce()).then((res)=>createItemsMarcups(res))
     // delIce(id).then(getIce).then(res=>createItemsMarcups(res))
+  }
+  if(action === "edit"){
+    openModal()
+    currentId = id
+    form.elements.image.value = li.querySelector("img").src
+    form.elements.name.value = li.querySelector(".title").textContent
+    form.elements.description.value = li.querySelector(".desc").textContent
+    form.elements.price.value = li.querySelector(".price").textContent
+    form.elements.calories.value = li.querySelector(".cal").textContent
+    form.elements.type.value = li.querySelector(".type").textContent
   }
 });
 
