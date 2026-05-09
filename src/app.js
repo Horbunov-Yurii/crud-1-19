@@ -27,7 +27,13 @@ function createItemsMarcups(array) {
   listRef.innerHTML = item;
 }
 
-getIce().then((res) => createItemsMarcups(res));
+// getIce().then((res) => createItemsMarcups(res));
+async function init () {
+const res = await getIce()
+createItemsMarcups(res)
+
+}
+init()
 
 modalBtn.addEventListener("click", openModal);
 
@@ -41,7 +47,25 @@ function closeModal() {
   backdrop.style.pointerEvents = "none";
 }
 
-form.addEventListener("submit", (event) => {
+// form.addEventListener("submit", (event) => {
+//   event.preventDefault();
+//   const elements = event.currentTarget.elements;
+//   const iceData = {
+//     image: elements.image.value,
+//     name: elements.name.value,
+//     description: elements.description.value,
+//     price: elements.price.value,
+//     calories: elements.calories.value,
+//     type: elements.type.value,
+//   };
+//   if(currentId === null){
+//   postIce(iceData).then(afterSubmit);
+//   return
+//   }
+//   updateIce(currentId, iceData).then(afterSubmit)
+// });
+
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const elements = event.currentTarget.elements;
   const iceData = {
@@ -53,20 +77,70 @@ form.addEventListener("submit", (event) => {
     type: elements.type.value,
   };
   if(currentId === null){
-  postIce(iceData).then(afterSubmit);
+  // postIce(iceData).then(afterSubmit);
+  await postIce(iceData)
+  afterSubmit()
   return
   }
-  updateIce(currentId, iceData).then(afterSubmit)
+  // updateIce(currentId, iceData).then(afterSubmit)
+  await updateIce(currentId, iceData)
+  afterSubmit()
 });
-function afterSubmit (){
-    getIce().then((res) => {
+
+
+
+
+
+
+
+// function afterSubmit (){
+//     getIce().then((res) => {
+//       form.reset();
+//       closeModal();
+//       createItemsMarcups(res);
+//     });
+// }
+
+async function afterSubmit (){
+    const res = await getIce() 
       form.reset();
       closeModal();
       createItemsMarcups(res);
-    });
-}
+    };
 
-listRef.addEventListener("click", (event) => {
+
+
+
+
+
+// listRef.addEventListener("click", (event) => {
+//   const action = event.target.dataset.action;
+  
+//   if (!action) {
+//     return;
+//   }
+//   const li = event.target.closest("li");
+
+//   const id = li.id;
+//   if(action === "delete"){
+//     delIce(id).then(()=>getIce()).then((res)=>createItemsMarcups(res))
+//     // delIce(id).then(getIce).then(res=>createItemsMarcups(res))
+//   }
+//   if(action === "edit"){
+//     openModal()
+//     currentId = id
+//     form.elements.image.value = li.querySelector("img").src
+//     form.elements.name.value = li.querySelector(".title").textContent
+//     form.elements.description.value = li.querySelector(".desc").textContent
+//     form.elements.price.value = li.querySelector(".price").textContent
+//     form.elements.calories.value = li.querySelector(".cal").textContent
+//     form.elements.type.value = li.querySelector(".type").textContent
+//   }
+// });
+
+
+
+listRef.addEventListener("click", async (event) => {
   const action = event.target.dataset.action;
   
   if (!action) {
@@ -76,8 +150,10 @@ listRef.addEventListener("click", (event) => {
 
   const id = li.id;
   if(action === "delete"){
-    delIce(id).then(()=>getIce()).then((res)=>createItemsMarcups(res))
-    // delIce(id).then(getIce).then(res=>createItemsMarcups(res))
+    // delIce(id).then(()=>getIce()).then((res)=>createItemsMarcups(res))
+    delIce(id)
+    const res = await getIce()
+    createItemsMarcups(res)
   }
   if(action === "edit"){
     openModal()
@@ -90,4 +166,3 @@ listRef.addEventListener("click", (event) => {
     form.elements.type.value = li.querySelector(".type").textContent
   }
 });
-
